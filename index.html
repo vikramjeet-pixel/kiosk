@@ -3,120 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
-  <title>Kiosk — Simple Tablet Kiosk Browser</title>
-  <meta name="description" content="A simple kiosk browser for tablets. Paste a URL and show it full screen." />
-  <meta name="theme-color" content="#0b0b14" />
+  <title>Kiosk</title>
+  <meta name="description" content="Kiosk display for tablets." />
+  <meta name="theme-color" content="#ffffff" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Kiosk" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/png" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <!-- ============ SETUP SCREEN ============ -->
-  <main id="setup" class="screen">
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
+<body class="display">
+  <iframe id="frame" title="Kiosk content" allow="autoplay; fullscreen; camera; microphone; geolocation; clipboard-read; clipboard-write"></iframe>
 
-    <section class="card" aria-labelledby="title">
-      <img src="icons/icon-192.png" alt="" class="logo" width="72" height="72" />
-      <h1 id="title">Kiosk</h1>
-      <p class="subtitle">Paste the website you want to show on this tablet.</p>
-
-      <form id="url-form" autocomplete="off">
-        <div class="input-wrap">
-          <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5M14 10a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>
-          <input id="url-input" type="text" inputmode="url" placeholder="https://example.com" spellcheck="false" autocapitalize="off" aria-label="Website address" />
-          <button type="button" id="paste-btn" class="chip">Paste</button>
-        </div>
-        <p id="error" class="error" role="alert"></p>
-
-        <button type="submit" id="start-btn" class="primary">
-          <span>Start Kiosk</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-      </form>
-
-      <div id="recent-wrap" class="recent" hidden>
-        <h2>Recent</h2>
-        <ul id="recent-list"></ul>
-      </div>
-
-      <details class="options">
-        <summary>Options</summary>
-        <label class="row">
-          <span>Exit PIN <small>(optional, 4 digits)</small></span>
-          <input id="pin-input" type="password" inputmode="numeric" maxlength="4" pattern="\d{4}" placeholder="None" />
-        </label>
-        <label class="row">
-          <span>Auto-refresh</span>
-          <select id="refresh-select">
-            <option value="0">Off</option>
-            <option value="5">Every 5 min</option>
-            <option value="15">Every 15 min</option>
-            <option value="60">Every hour</option>
-          </select>
-        </label>
-        <label class="row">
-          <span>Open automatically on launch</span>
-          <input id="autostart-input" type="checkbox" class="toggle" checked />
-        </label>
-      </details>
-
-      <p class="hint">To exit kiosk mode, <strong>press and hold the top-right corner</strong> for 3 seconds.</p>
-    </section>
-
-    <button id="install-btn" class="install" hidden>Install app</button>
+  <main id="empty" class="center" hidden>
+    <h1>No website set</h1>
+    <p class="muted">Go to admin and enter the address you want to show.</p>
+    <a href="admin.html" class="btn btn-primary" id="open-admin">Open admin</a>
   </main>
 
-  <!-- ============ AUTOSTART COUNTDOWN ============ -->
-  <div id="countdown" class="overlay" hidden>
-    <div class="dialog">
-      <p>Starting kiosk in</p>
-      <div id="countdown-num" class="count">3</div>
-      <p id="countdown-url" class="muted url-line"></p>
-      <button id="countdown-cancel" class="ghost">Change website</button>
-    </div>
+  <div id="offline" class="center notice" hidden>
+    <p><strong>No internet connection</strong></p>
+    <p class="muted">The page will reload when the connection is back.</p>
   </div>
 
-  <!-- ============ KIOSK VIEW ============ -->
-  <div id="kiosk" class="kiosk" hidden>
-    <div id="loader" class="loader"><div class="spinner"></div></div>
-    <iframe id="frame" title="Kiosk content" allow="autoplay; fullscreen; camera; microphone; geolocation; clipboard-read; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <div id="hotspot" class="hotspot" aria-hidden="true"><span class="hold-bar"></span></div>
 
-    <div id="offline" class="offline" hidden>
-      <div class="dialog">
-        <p class="big">No connection</p>
-        <p class="muted">Will reload automatically when back online.</p>
-      </div>
-    </div>
-
-    <!-- Hidden exit hotspot -->
-    <div id="exit-hotspot" class="hotspot" aria-label="Hold to exit">
-      <svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/></svg>
-    </div>
-  </div>
-
-  <!-- ============ PIN PROMPT ============ -->
-  <div id="pin-dialog" class="overlay" hidden>
-    <div class="dialog">
-      <p class="big">Enter PIN</p>
-      <div id="pin-dots" class="pin-dots"><i></i><i></i><i></i><i></i></div>
-      <div class="keypad" id="keypad">
-        <button>1</button><button>2</button><button>3</button>
-        <button>4</button><button>5</button><button>6</button>
-        <button>7</button><button>8</button><button>9</button>
-        <button data-k="cancel" class="muted-key">Cancel</button><button>0</button><button data-k="del" class="muted-key">⌫</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
+  <script src="common.js"></script>
+  <script src="display.js"></script>
 </body>
 </html>

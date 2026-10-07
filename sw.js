@@ -1,9 +1,12 @@
-const CACHE = "kiosk-v1";
+const CACHE = "kiosk-v2";
 const SHELL = [
   "./",
   "index.html",
+  "admin.html",
   "styles.css",
-  "app.js",
+  "common.js",
+  "display.js",
+  "admin.js",
   "manifest.webmanifest",
   "icons/icon-192.png",
   "icons/icon-512.png",

@@ -1,14 +1,13 @@
 # kiosk
 
-A dead-simple PWA kiosk browser for tablets. Paste a URL, tap **Start Kiosk**, done.
+A simple PWA kiosk browser for tablets.
 
-## Features
-- Paste a URL → shown full screen
-- **Exit:** press & hold the top-right corner for 3 seconds (optional 4-digit PIN)
-- Keeps the screen awake, blocks the back button
-- Optional auto-refresh, auto-reload when the internet comes back
-- Opens straight into the last website on launch (3 s countdown to change it)
-- Installable, works offline (app shell)
+## How it works
+- **Display** (`index.html`): shows your website full screen. Nothing else.
+- **Admin** (`admin.html`): set the website, reload interval and an optional 4-digit PIN.
+- From the display, **press and hold the top-right corner for 3 seconds** to open admin.
+- Keeps the screen on, blocks the back button, reloads when the internet comes back.
+- Settings are stored on the tablet itself.
 
 ## Run locally
 ```bash

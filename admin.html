@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kiosk admin</title>
+  <meta name="description" content="Set the website shown on the kiosk." />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="admin">
+  <!-- PIN lock -->
+  <main id="lock" class="page" hidden>
+    <h1>Admin</h1>
+    <form id="lock-form" class="panel">
+      <label for="lock-pin">Enter PIN</label>
+      <input id="lock-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" />
+      <p id="lock-error" class="error"></p>
+      <div class="actions">
+        <a href="index.html" class="btn">Back</a>
+        <button type="submit" class="btn btn-primary">Unlock</button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Settings -->
+  <main id="settings" class="page" hidden>
+    <h1>Admin</h1>
+
+    <form id="settings-form" class="panel" autocomplete="off">
+      <label for="url">Website to display</label>
+      <div class="field-row">
+        <input id="url" type="text" inputmode="url" placeholder="https://example.com" spellcheck="false" autocapitalize="off" />
+        <button type="button" id="paste" class="btn">Paste</button>
+      </div>
+      <p id="url-error" class="error"></p>
+
+      <label for="refresh">Reload page</label>
+      <select id="refresh">
+        <option value="0">Never</option>
+        <option value="5">Every 5 minutes</option>
+        <option value="15">Every 15 minutes</option>
+        <option value="60">Every hour</option>
+      </select>
+
+      <label for="pin">Admin PIN <span class="muted">(optional, 4 digits)</span></label>
+      <input id="pin" type="password" inputmode="numeric" maxlength="4" placeholder="No PIN" />
+
+      <div class="actions">
+        <a href="index.html" class="btn" id="cancel">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save and show</button>
+      </div>
+    </form>
+
+    <p class="muted small">To come back here from the display, press and hold the top-right corner of the screen for 3 seconds.</p>
+    <button id="install" class="btn" hidden>Install app on this device</button>
+  </main>
+
+  <script src="common.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
